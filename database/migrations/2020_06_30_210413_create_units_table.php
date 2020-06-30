@@ -18,6 +18,9 @@ class CreateUnitsTable extends Migration
             $table->string("name", 45);
             $table->string("abbreviation", 45);
             $table->timestamps();
+
+            $table->engine = 'InnoDB';
+            $table->charset = 'utf8mb4';
         });
     }
 
