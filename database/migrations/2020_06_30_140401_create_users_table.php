@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string("email", 255)->unique();
             $table->string("password", 255);
             $table->boolean("deleted");
-            $table->boolean("validated");
+            $table->boolean("confirmed");
             $table->timestamps();
 
             $table->foreignId('role_id')->constrained();
