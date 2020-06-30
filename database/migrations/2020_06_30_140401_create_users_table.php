@@ -23,9 +23,7 @@ class CreateUsersTable extends Migration
             $table->boolean("validated");
             $table->timestamps();
 
-            $table->foreignId('role_id')->constrained()
-                ->onDelete('set null')
-                ->onUpdate('cascade');
+            $table->foreignId('role_id')->constrained();
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
