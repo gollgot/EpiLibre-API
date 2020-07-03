@@ -40,7 +40,7 @@ class UsersTableSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'role_id' => 1,
+            'role_id' => 2,
         ]);
 
         DB::table('users')->insert([
@@ -55,7 +55,7 @@ class UsersTableSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'role_id' => 2,
+            'role_id' => 3,
         ]);
 
         DB::table('users')->insert([
@@ -70,7 +70,7 @@ class UsersTableSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
 
-            'role_id' => 2,
+            'role_id' => 3,
         ]);
     }
 }

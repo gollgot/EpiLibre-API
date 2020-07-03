@@ -9,7 +9,11 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-
+    /**
+     * Basic Auth and JWT token generation if auth granted
+     * @param Request $request The request
+     * @return \Illuminate\Http\JsonResponse Json response
+     */
     public function login(Request $request){
         $JSONResponseHelper = new JSONResponseHelper();
 
@@ -27,7 +31,7 @@ class AuthController extends Controller
                 "password" => $credentials[1],
                 "confirmed" => true,
                 "deleted" => false]
-            )->first();
+            )->with("role")->first();
 
             // Wrong credentials
             if(empty($user)){
@@ -39,7 +43,7 @@ class AuthController extends Controller
                     "firstname" => $user->firstname,
                     "lastname" => $user->lastname,
                     "email" => $user->email,
-                    "role" => "SUPER_ADMIN"
+                    "role" => $user->role->shortName
                 ];
                 $token = JWT::encode($token, env("JWT_SECRET", null));
                 return $JSONResponseHelper->successJSONResponse(['token' => $token]);
