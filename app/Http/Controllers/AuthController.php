@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\CustomHelpers\JSONResponseHelper;
+use App\Role;
 use App\User;
 use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
@@ -50,6 +51,56 @@ class AuthController extends Controller
             }
         }
 
+    }
+
+    /**
+     * Register function (need confirmation by SUPER_ADMIN to be activated)
+     * @param Request $request The request
+     * @return \Illuminate\Http\JsonResponse Json response
+     */
+    public function register(Request $request){
+        $firstname = $request->input("firstname");
+        $lastname = $request->input("lastname");
+        $email = $request->input("email");
+        $password = $request->input("password");
+        $passwordRepeated = $request->input("passwordRepeated");
+
+        $JSONResponseHelper = new JSONResponseHelper();
+
+        // Fields missing or incorrect
+        if(empty($firstname) || empty($lastname) || empty($email) || empty($password) || empty($passwordRepeated)
+            || !filter_var($email, FILTER_VALIDATE_EMAIL)
+            || ($password != $passwordRepeated)){
+            return $JSONResponseHelper->badRequestJSONResponse("Some fields are missing or incorrect");
+        }
+        // Fields correct
+        else {
+            // Check email uniqueness
+            $user = User::where("email", $email)->first();
+            if(!empty($user)){
+                return $JSONResponseHelper->badRequestJSONResponse("Email already used");
+            }
+            // All correct
+            else{
+                try {
+                    $sellerRole = Role::where("shortName", "SELLER")->first();
+                    $user = new User();
+                    $user->firstname = $firstname;
+                    $user->lastname = $lastname;
+                    $user->email = $email;
+                    $user->password = $password;
+                    $user->deleted = false;
+                    $user->confirmed = false;
+                    $user->role()->associate($sellerRole);
+
+                    $user->save();
+                    return $JSONResponseHelper->createdJSONResponse($user);
+                }catch(\Exception $e){
+                    // Error
+                    return $JSONResponseHelper->badRequestJSONResponse();
+                }
+            }
+        }
     }
 
 }
