@@ -21,5 +21,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->post('/auth/login', 'AuthController@login');
     $router->post('/auth/register', 'AuthController@register');
     // Users
-    $router->get('/users/pending', 'UserController@pending');
+    $router->get('/users/pending', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
+        'uses' => 'UserController@pending'
+    ]);
 });
