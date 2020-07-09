@@ -64,12 +64,16 @@ class UserController extends Controller
             return $JSONResponseHelper->badRequestJSONResponse();
         }
 
-        $deletedEmail = $user->email;
+        // Deleted resource
+        $resource = [
+            "firstname" => $user->firstname,
+            "lastname" => $user->lastname
+        ];
 
         // Delete the pending user
         $user->delete();
 
-        return $JSONResponseHelper->successJSONResponse(["email"=>$deletedEmail]);
+        return $JSONResponseHelper->successJSONResponse($resource);
     }
 
 }
