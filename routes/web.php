@@ -25,4 +25,12 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
         'uses' => 'UserController@pending'
     ]);
+    $router->patch('/users/{user_id}/confirm', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
+        'uses' => 'UserController@confirm'
+    ]);
+    $router->patch('/users/{user_id}/unconfirm', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
+        'uses' => 'UserController@unconfirm'
+    ]);
 });
