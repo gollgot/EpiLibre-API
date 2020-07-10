@@ -41,6 +41,7 @@ class AuthController extends Controller
             // Auth OK -> Generate JWT
             else{
                 $token = [
+                    "id" => $user->id,
                     "firstname" => $user->firstname,
                     "lastname" => $user->lastname,
                     "email" => $user->email,
