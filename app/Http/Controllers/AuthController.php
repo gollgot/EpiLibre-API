@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\CustomHelpers\JSONResponseHelper;
 use App\Role;
 use App\User;
-use Firebase\JWT\JWT;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -25,7 +25,7 @@ class AuthController extends Controller
         if(empty($credentials)){
             return $JSONResponseHelper->badRequestJSONResponse("Invalid login request");
         }
-        // Credentials founds
+        // Credentials founds and user is confirmed and not soft deleted
         else{
             $user = User::where([
                 "email" => $credentials[0],
@@ -40,15 +40,17 @@ class AuthController extends Controller
             }
             // Auth OK -> Generate JWT
             else{
-                $token = [
-                    "id" => $user->id,
-                    "firstname" => $user->firstname,
-                    "lastname" => $user->lastname,
-                    "email" => $user->email,
-                    "role" => $user->role->shortName
-                ];
-                $token = JWT::encode($token, env("JWT_SECRET", null));
-                return $JSONResponseHelper->successJSONResponse(['token' => $token]);
+                // Update tokenAPI for more security and return the user as resource
+                $user->tokenAPI = Str::random(64);
+                $user->save();
+                return $JSONResponseHelper->successJSONResponse([
+                    'id' => $user->id,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'email' => $user->email,
+                    'role' => $user->role['shortName'],
+                    'tokenAPI' => $user->tokenAPI
+                ]);
             }
         }
 
@@ -86,12 +88,13 @@ class AuthController extends Controller
                 try {
                     $sellerRole = Role::where("shortName", "SELLER")->first();
                     $user = new User();
-                    $user->firstname = $firstname;
-                    $user->lastname = $lastname;
+                    $user->firstname = Str::ucfirst(strtolower($firstname)); // Store first name with the first character capitalized
+                    $user->lastname = Str::ucfirst(strtolower($lastname)); // Store last name with the first character capitalized
                     $user->email = $email;
                     $user->password = $password;
                     $user->deleted = false;
                     $user->confirmed = false;
+                    $user->tokenAPI = Str::random(64);
                     $user->role()->associate($sellerRole);
 
                     $user->save();

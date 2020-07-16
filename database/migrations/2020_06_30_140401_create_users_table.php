@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration
             $table->string("password", 255);
             $table->boolean("deleted");
             $table->boolean("confirmed");
+            $table->string("tokenAPI", 64);
             $table->timestamps();
 
             $table->foreignId('role_id')->constrained();

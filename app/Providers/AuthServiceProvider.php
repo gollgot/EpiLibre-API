@@ -32,16 +32,14 @@ class AuthServiceProvider extends ServiceProvider
         // the User instance via an API token or any other method necessary.
 
         $this->app['auth']->viaRequest('api', function ($request) {
-            // Fetch the JWT token from bearer (Authorization header)
-            $jwt = $request->bearerToken();
-            // Successfully decoded (no error) -> return the connected User
-            try {
-                $decoded = JWT::decode($jwt, env("JWT_SECRET"), array('HS256'));
-                return User::where("email", $decoded->email)->first();
-            }
-            // Error when decoded -> Return null
-            catch (\Exception $e) {
-               return null;
+            // Fetch the tokenAPI from bearer (Authorization header)
+            $tokenAPI = $request->bearerToken();
+            // tokenAPI is correct -> return the connected User
+            $user = User::where("tokenAPI", $tokenAPI)->first();
+            if(empty($user)){
+                return null;
+            }else{
+                return $user;
             }
         });
     }
