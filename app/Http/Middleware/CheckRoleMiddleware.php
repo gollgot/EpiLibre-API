@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use App\CustomHelpers\JSONResponseHelper;
+use App\User;
 use Closure;
-use Firebase\JWT\JWT;
 
 /**
  * Middleware to check the User's role
@@ -22,11 +22,11 @@ class checkRoleMiddleware
      */
     public function handle($request, Closure $next, $targetRole)
     {
-        $jwt = $request->bearerToken();
-        // JWT is correct because we must call this middleware after the auth middleware
-        $decoded = JWT::decode($jwt, env("JWT_SECRET"), array('HS256'));
+        $tokenAPI = $request->bearerToken();
+        // The API token is correct because we must call this middleware after the auth middleware
+        $user = User::where("tokenAPI", $tokenAPI)->with("role")->first();
         // Token role are same as target role -> OK
-        if($decoded->role == $targetRole){
+        if($user->role["shortName"] == $targetRole){
             return $next($request);
         }
 

@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\CustomHelpers\JSONResponseHelper;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
+use PHPUnit\Util\Json;
 
 class Authenticate
 {
@@ -28,6 +30,8 @@ class Authenticate
     /**
      * Handle an incoming request.
      *
+     * uses the AuthServiceProvider boot() method to check the auth process
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @param  string|null  $guard
@@ -35,8 +39,10 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        // TokenAPI is wrong -> return unauthorized json response
         if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+            $JSONResponseHelper = new JSONResponseHelper();
+            return $JSONResponseHelper->unauthorizedJSONResponse();
         }
 
         return $next($request);

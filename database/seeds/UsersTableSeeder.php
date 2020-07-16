@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UsersTableSeeder extends Seeder
 {
@@ -21,6 +22,7 @@ class UsersTableSeeder extends Seeder
             'password' => hash('sha256', 'loic'),
             'deleted' => false,
             'confirmed' => true,
+            'tokenAPI' => Str::random(64),
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -36,6 +38,7 @@ class UsersTableSeeder extends Seeder
             'password' => hash('sha256', 'sarah'),
             'deleted' => false,
             'confirmed' => true,
+            'tokenAPI' => Str::random(64),
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -51,6 +54,7 @@ class UsersTableSeeder extends Seeder
             'password' => hash('sha256', 'jean'),
             'deleted' => false,
             'confirmed' => true,
+            'tokenAPI' => Str::random(64),
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -66,6 +70,7 @@ class UsersTableSeeder extends Seeder
             'password' => hash('sha256', 'alice'),
             'deleted' => false,
             'confirmed' => false,
+            'tokenAPI' => Str::random(64),
 
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
