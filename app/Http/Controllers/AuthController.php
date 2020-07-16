@@ -45,11 +45,11 @@ class AuthController extends Controller
                 $user->save();
                 return $JSONResponseHelper->successJSONResponse([
                     'id' => $user->id,
-                    'fistname' => $user->firstname,
+                    'firstname' => $user->firstname,
                     'lastname' => $user->lastname,
                     'email' => $user->email,
-                    'tokenAPI' => $user->tokenAPI,
-                    'role' => $user->role['shortName']
+                    'role' => $user->role['shortName'],
+                    'tokenAPI' => $user->tokenAPI
                 ]);
             }
         }
