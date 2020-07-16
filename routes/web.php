@@ -20,6 +20,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // Auth
     $router->post('/auth/login', 'AuthController@login');
     $router->post('/auth/register', 'AuthController@register');
+
     // Users
     $router->get('/users/pending', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
@@ -32,5 +33,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->patch('/users/{user_id}/unconfirm', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
         'uses' => 'UserController@unconfirm'
+    ]);
+
+    // Products
+    $router->get('/products', [
+        'middleware' => ['auth'],
+        'uses' => 'ProductController@index'
     ]);
 });
