@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index(Request $request){
         $JSONResponseHelper = new JSONResponseHelper();
 
-        $products = product::orderBy('name')->with('category')->with('unit')->get();
+        $products = Product::orderBy('name')->with('category')->with('unit')->get();
 
         $resource = array();
         foreach ($products as $product){
