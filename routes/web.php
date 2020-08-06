@@ -46,4 +46,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth'],
         'uses' => 'CategoryController@index'
     ]);
+
+    // Units
+    $router->get('/units', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:ADMIN'],
+        'uses' => 'CategoryController@index'
+    ]);
 });
