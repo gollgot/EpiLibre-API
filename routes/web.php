@@ -50,6 +50,6 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     // Units
     $router->get('/units', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:ADMIN'],
-        'uses' => 'CategoryController@index'
+        'uses' => 'UnitController@index'
     ]);
 });
