@@ -49,6 +49,7 @@ class AuthController extends Controller
                     'lastname' => $user->lastname,
                     'email' => $user->email,
                     'role' => $user->role['shortName'],
+                    'rolePretty' => $user->role['name'],
                     'tokenAPI' => $user->tokenAPI
                 ]);
             }
