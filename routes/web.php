@@ -40,6 +40,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth'],
         'uses' => 'ProductController@index'
     ]);
+    $router->put('/products/{product_id}', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:ADMIN'],
+        'uses' => 'ProductController@update'
+    ]);
 
     // Categories
     $router->get('/categories', [

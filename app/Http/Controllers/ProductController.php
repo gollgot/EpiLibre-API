@@ -4,8 +4,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Category;
 use App\CustomHelpers\JSONResponseHelper;
 use App\Product;
+use App\Unit;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -35,6 +37,40 @@ class ProductController extends Controller
         }
 
         return $JSONResponseHelper->successJSONResponse($resource);
+    }
+
+    /**
+     * Update a whole product
+     * @param Request $request The request
+     * @param Integer $product_id The product id we want to update
+     * @return \Illuminate\Http\JsonResponse The json response
+     */
+    public function update(Request $request, $product_id){
+        $JSONResponseHelper = new JSONResponseHelper();
+        $product = Product::find($product_id);
+
+        // Bad product ID
+        if(empty($product)){
+            return $JSONResponseHelper->badRequestJSONResponse();
+        }
+        else{
+            // Check the linked category and unit passed in parameter
+            $category = Category::where("name", $request->get("category"))->first();
+            $unit = Unit::where("abbreviation", $request->get("unit"))->first();
+            if(empty($category) || empty($unit)){
+                return $JSONResponseHelper->badRequestJSONResponse();
+            }
+
+            $product->name = $request->get("name");
+            $product->image = empty($request->get("image")) ? null : $request->get("image");
+            $product->price = $request->get("price");
+            $product->category()->associate($category);
+            $product->unit()->associate($unit);
+
+            $product->save();
+
+            return $JSONResponseHelper->successJSONResponse($product);
+        }
     }
 
 }
