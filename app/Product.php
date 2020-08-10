@@ -25,4 +25,12 @@ class Product extends Model
         return $this->belongsTo('App\Unit');
     }
 
+    /**
+     * Get the product's last modifier user
+     */
+    public function updatedBy()
+    {
+        return $this->belongsTo('App\User', 'user_id');
+    }
+
 }

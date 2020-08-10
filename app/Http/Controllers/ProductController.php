@@ -8,6 +8,7 @@ use App\Category;
 use App\CustomHelpers\JSONResponseHelper;
 use App\Product;
 use App\Unit;
+use App\User;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -21,7 +22,7 @@ class ProductController extends Controller
     public function index(Request $request){
         $JSONResponseHelper = new JSONResponseHelper();
 
-        $products = Product::orderBy('name')->with('category')->with('unit')->get();
+        $products = Product::orderBy('name')->with('category')->with('unit')->with('updatedBy')->get();
 
         $resource = array();
         foreach ($products as $product){
@@ -32,7 +33,9 @@ class ProductController extends Controller
                 "stock" => $product->stock,
                 "image" => $product->image,
                 "category" => $product->category["name"],
-                "unit" => $product->unit["abbreviation"]
+                "unit" => $product->unit["abbreviation"],
+                "updatedAt" => date('d.m.Y H:i', strtotime($product->updated_at)),
+                "updatedBy" => $product->updatedBy["firstname"] . " " . $product->updatedBy["lastname"]
             ]);
         }
 
@@ -61,11 +64,15 @@ class ProductController extends Controller
                 return $JSONResponseHelper->badRequestJSONResponse();
             }
 
+            // user that has updated the product
+            $user = User::where("tokenAPI", $request->bearerToken())->first();
+
             $product->name = $request->get("name");
             $product->image = empty($request->get("image")) ? null : $request->get("image");
             $product->price = $request->get("price");
             $product->category()->associate($category);
             $product->unit()->associate($unit);
+            $product->updatedBy()->associate($user);
 
             $product->save();
 

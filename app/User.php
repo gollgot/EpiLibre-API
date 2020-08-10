@@ -38,4 +38,12 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this->belongsTo('App\Role');
     }
 
+    /**
+     * Get the products modified by the user
+     */
+    public function products()
+    {
+        return $this->hasMany('App\Products');
+    }
+
 }
