@@ -51,25 +51,21 @@ class ProductController extends Controller
     public function update(Request $request, $product_id){
         $JSONResponseHelper = new JSONResponseHelper();
         $product = Product::find($product_id);
+        // Check the linked category and unit passed in parameter
+        $category = Category::where("name", $request->get("category"))->first();
+        $unit = Unit::where("abbreviation", $request->get("unit"))->first();
 
-        // Bad product ID
-        if(empty($product)){
+        // Bad product ID or category / unit
+        if(empty($product) || empty($category) || empty($unit)){
             return $JSONResponseHelper->badRequestJSONResponse();
         }
         else{
-            // Check the linked category and unit passed in parameter
-            $category = Category::where("name", $request->get("category"))->first();
-            $unit = Unit::where("abbreviation", $request->get("unit"))->first();
-            if(empty($category) || empty($unit)){
-                return $JSONResponseHelper->badRequestJSONResponse();
-            }
-
             // user that has updated the product
             $user = User::where("tokenAPI", $request->bearerToken())->first();
 
             $product->name = $request->get("name");
             $product->image = empty($request->get("image")) ? null : $request->get("image");
-            $product->price = $request->get("price");
+            $product->price = doubleval($request->get("price"));
             $product->category()->associate($category);
             $product->unit()->associate($unit);
             $product->updatedBy()->associate($user);
@@ -79,5 +75,45 @@ class ProductController extends Controller
             return $JSONResponseHelper->successJSONResponse($product);
         }
     }
+
+    /**
+     * Store a new product
+     * @param Request $request The request
+     * @return \Illuminate\Http\JsonResponse The Json response
+     */
+    public function store(Request $request){
+        $JSONResponseHelper = new JSONResponseHelper();
+
+        $user = User::where("tokenAPI", $request->bearerToken())->first();
+        $category = Category::where("name", $request->get("category"))->first();
+        $unit = Unit::where("abbreviation", $request->get("unit"))->first();
+
+        if(empty($category) || empty($unit)){
+            return $JSONResponseHelper->badRequestJSONResponse();
+        }else {
+            $product = new Product();
+
+            $product->name = $request->get("name");
+            $product->image = empty($request->get("image")) ? null : $request->get("image");
+            $product->price = doubleval($request->get("price"));
+            $product->stock = 0;
+            $product->category()->associate($category);
+            $product->unit()->associate($unit);
+            $product->updatedBy()->associate($user);
+
+            $product->save();
+
+            return $JSONResponseHelper->createdJSONResponse([
+                "name" => $product->name,
+                "image" => $product->image,
+                "price" => $product->price,
+                "stock" => $product->stock,
+                "category" => $product->category["name"],
+                "unit" => $product->unit["abbreviation"],
+                "updatedBy" => $product->updatedBy["firstname"] . " " . $product->updatedBy["lastname"]
+            ]);
+        }
+    }
+
 
 }

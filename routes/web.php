@@ -44,6 +44,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:ADMIN'],
         'uses' => 'ProductController@update'
     ]);
+    $router->post('/products', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:ADMIN'],
+        'uses' => 'ProductController@store'
+    ]);
 
     // Categories
     $router->get('/categories', [
