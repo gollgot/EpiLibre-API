@@ -60,4 +60,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:ADMIN'],
         'uses' => 'UnitController@index'
     ]);
+
+    // ORDERs
+    $router->post('/orders', [
+        'middleware' => ['auth'],
+        'uses' => 'OrderController@store'
+    ]);
 });
