@@ -25,11 +25,10 @@ class OrderController extends Controller
         $resource = [];
         foreach($orders as $order){
             $orderArray = [
-                "id" => $order->id,
                 "totalPrice" => $order->totalPrice,
                 "seller" => $order->user['firstname'] . " " . $order->user["lastname"],
                 "created_at" => date("d.m.Y H:i", strtotime($order->created_at)),
-                "nbProducts" => sizeof($order->ordersProducts)
+                "products" => $this->fetchProducts($order)
             ];
             array_push($resource, $orderArray);
         }
@@ -95,5 +94,29 @@ class OrderController extends Controller
             'createdBy' => $order->user['firstname'] . " " . $order->user['lastname'],
             'orderProduct' => $order->ordersProducts()
         ]);
+    }
+
+
+
+
+    /**
+     * Return an array contains all Product info for a specific Order
+     * @param Order $order The Order object
+     * @return array An array with all Products' info
+     */
+    private function fetchProducts($order)
+    {
+        $productArray = [];
+        foreach($order->ordersProducts as $orderProduct){
+            array_push($productArray, [
+                "name" => $orderProduct->product->name,
+                "category" => $orderProduct->product->category->name,
+                "unit" => $orderProduct->product->unit->abbreviation,
+                "price" => $orderProduct->price,
+                "quantity" => $orderProduct->quantity,
+            ]);
+        }
+
+        return $productArray;
     }
 }
