@@ -90,7 +90,7 @@ class OrderController extends Controller
         // no error occured
         return $JSONResponseHelper->createdJSONResponse([
             'id' => $order->id,
-            'totalPrice' => $order->totalPrice,
+            'totalPrice' => doubleval($order->totalPrice),
             'created_at' => date('d.m.Y H:i', strtotime($order->created_at)),
             'createdBy' => $order->user['firstname'] . " " . $order->user['lastname'],
             'orderProduct' => $order->ordersProducts()
