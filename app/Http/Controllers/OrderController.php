@@ -14,6 +14,30 @@ class OrderController extends Controller
 {
 
     /**
+     * Show all Orders order by date
+     * @return \Illuminate\Http\JsonResponse the Json Response
+     */
+    public function index(){
+        $JSONResponseHelper = new JSONResponseHelper();
+
+        $orders = Order::orderBy('created_at', 'DESC')->get();
+
+        $resource = [];
+        foreach($orders as $order){
+            $orderArray = [
+                "id" => $order->id,
+                "totalPrice" => $order->totalPrice,
+                "seller" => $order->user['firstname'] . " " . $order->user["lastname"],
+                "created_at" => date("d.m.Y H:i", strtotime($order->created_at)),
+                "nbProducts" => sizeof($order->ordersProducts)
+            ];
+            array_push($resource, $orderArray);
+        }
+
+        return $JSONResponseHelper->successJSONResponse($resource);
+    }
+
+    /**
      * Store a new Order with all the linked orders_products, we use transaction to be sure that all data is correct
      * @param Request $request The request
      * @return \Illuminate\Http\JsonResponse The json response

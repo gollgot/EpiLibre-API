@@ -61,7 +61,11 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'uses' => 'UnitController@index'
     ]);
 
-    // ORDERs
+    // Orders
+    $router->get('/orders', [
+        'middleware' => ['auth'],
+        'uses' => 'OrderController@index'
+    ]);
     $router->post('/orders', [
         'middleware' => ['auth'],
         'uses' => 'OrderController@store'
