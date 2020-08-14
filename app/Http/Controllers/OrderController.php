@@ -47,9 +47,11 @@ class OrderController extends Controller
         $totalPrice = doubleval($request->get("totalPrice"));
         $productsId = explode(";", $request->get("productsId"));
         $quantities = explode(";", $request->get("quantities"));
+        $prices = explode(";", $request->get("prices"));
 
-        // Must have a total price (not 0), some productsId and quantities, and the same size (if we have 4 products, we must have 4 quantities)
-        if(empty($totalPrice) || empty($productsId) || empty($quantities) || count($productsId) != count($quantities)){
+        // Must have a total price (not 0), some productsId, quantities and prices
+        // Prices are calculate from the application (to apply it's own calculation rules)
+        if(empty($totalPrice) || empty($productsId) || empty($quantities) || empty($prices)){
             return $JSONResponseHelper->badRequestJSONResponse();
         }
 
@@ -69,7 +71,7 @@ class OrderController extends Controller
                 $product = Product::find($productId);
 
                 $orderProduct = new OrderProduct();
-                $orderProduct->price = $product->price;
+                $orderProduct->price = $prices[$i];
                 $orderProduct->quantity = $quantities[$i];
                 $orderProduct->product()->associate($product);
                 $orderProduct->order()->associate($order);
