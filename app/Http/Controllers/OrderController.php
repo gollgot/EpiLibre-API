@@ -91,8 +91,8 @@ class OrderController extends Controller
             'id' => $order->id,
             'totalPrice' => doubleval($order->totalPrice),
             'created_at' => date('d.m.Y H:i', strtotime($order->created_at)),
-            'createdBy' => $order->user['firstname'] . " " . $order->user['lastname'],
-            'orderProduct' => $order->ordersProducts()
+            'seller' => $order->user['firstname'] . " " . $order->user['lastname'],
+            'orderProduct' => $order->ordersProducts
         ]);
     }
 
