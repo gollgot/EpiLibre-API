@@ -70,4 +70,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth'],
         'uses' => 'OrderController@store'
     ]);
+
+    // Price historics
+    $router->get('/priceHistorics/notSeenCount', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
+        'uses' => 'PriceHistoricController@notSeenCount'
+    ]);
 });
