@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\CustomHelpers\JSONResponseHelper;
+use App\PriceHistoric;
 use App\Product;
 use App\Unit;
 use App\User;
@@ -55,22 +56,34 @@ class ProductController extends Controller
         $category = Category::where("name", $request->get("category"))->first();
         $unit = Unit::where("abbreviation", $request->get("unit"))->first();
 
-        // Bad product ID or category / unit
-        if(empty($product) || empty($category) || empty($unit)){
+        // Bad product ID or category / unit / price (not be 0 or null)
+        if(empty($product) || empty($category) || empty($unit) || empty($request->get("price"))){
             return $JSONResponseHelper->badRequestJSONResponse();
         }
         else{
             // user that has updated the product
             $user = User::where("tokenAPI", $request->bearerToken())->first();
 
+            $oldPrice = $product->price;
+
+            // Set new attributes
             $product->name = $request->get("name");
             $product->image = empty($request->get("image")) ? null : $request->get("image");
             $product->price = doubleval($request->get("price"));
             $product->category()->associate($category);
             $product->unit()->associate($unit);
             $product->updatedBy()->associate($user);
-
             $product->save();
+
+            // Notify in DB when a price change !
+            if($oldPrice != $product->price){
+                $priceHistoric = new PriceHistoric();
+                $priceHistoric->oldPrice = $oldPrice;
+                $priceHistoric->newPrice = $product->price;
+                $priceHistoric->user()->associate($user);
+                $priceHistoric->product()->associate($product);
+                $priceHistoric->save();
+            }
 
             return $JSONResponseHelper->successJSONResponse($product);
         }
