@@ -31,7 +31,7 @@ class PriceHistoricController extends Controller
                 "productName" => $priceHistoric->product['name'],
                 "oldPrice" => $priceHistoric->oldPrice,
                 "newPrice" => $priceHistoric->newPrice,
-                "seed" => $priceHistoric->seen,
+                "seen" => $priceHistoric->seen,
                 "createdAt" => $priceHistoric->created_at,
                 "createdBy" => $priceHistoric->user['firstname'] . " " . $priceHistoric->user['lastname']
             ]);
