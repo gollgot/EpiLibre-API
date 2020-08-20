@@ -54,4 +54,21 @@ class PriceHistoricController extends Controller
         ]);
     }
 
+    /**
+     * Toggle all historic prices that his not seen yet to seen
+     * @return \Illuminate\Http\JsonResponse The Json response
+     */
+    public function toggleSeen(){
+        $JSONResponseHelper = new JSONResponseHelper();
+
+        $historicPricesNotSeen = PriceHistoric::where("seen", false)->get();
+
+        foreach($historicPricesNotSeen as $historicPriceNotSeen){
+            $historicPriceNotSeen->seen = true;
+            $historicPriceNotSeen->save();
+        }
+
+        return $JSONResponseHelper->successJSONResponse($historicPricesNotSeen);
+    }
+
 }

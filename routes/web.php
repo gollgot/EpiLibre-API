@@ -71,7 +71,7 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'uses' => 'OrderController@store'
     ]);
 
-    // Price historics
+    // Historic prices
     $router->get('/priceHistorics', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
         'uses' => 'PriceHistoricController@index'
@@ -79,5 +79,9 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     $router->get('/priceHistorics/notSeenCount', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
         'uses' => 'PriceHistoricController@notSeenCount'
+    ]);
+    $router->patch('/priceHistorics/toggleSeen', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
+        'uses' => 'PriceHistoricController@toggleSeen'
     ]);
 });
