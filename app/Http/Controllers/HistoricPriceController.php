@@ -5,35 +5,35 @@ namespace App\Http\Controllers;
 
 
 use App\CustomHelpers\JSONResponseHelper;
-use App\PriceHistoric;
+use App\HistoricPrice;
 use App\Unit;
 use App\User;
 use Illuminate\Http\Request;
 
-class PriceHistoricController extends Controller
+class HistoricPriceController extends Controller
 {
 
     /**
-     * Fetch all price historics order by date desc
+     * Fetch all historic prices order by date desc
      * @return \Illuminate\Http\JsonResponse The JsonResponse
      */
     public function index(){
         $JSONResponseHelper = new JSONResponseHelper();
 
-        $priceHistorics = PriceHistoric::with('user')
+        $historicPrices = HistoricPrice::with('user')
             ->with('product')
             ->orderBy('created_at', 'desc')
             ->get();
 
         $resource = [];
-        foreach($priceHistorics as $priceHistoric){
+        foreach($historicPrices as $historicPrice){
             array_push($resource, [
-                "productName" => $priceHistoric->product['name'],
-                "oldPrice" => $priceHistoric->oldPrice,
-                "newPrice" => $priceHistoric->newPrice,
-                "seen" => $priceHistoric->seen,
-                "createdAt" => date('d.m.Y H:i', strtotime($priceHistoric->created_at)),
-                "createdBy" => $priceHistoric->user['firstname'] . " " . $priceHistoric->user['lastname']
+                "productName" => $historicPrice->product['name'],
+                "oldPrice" => $historicPrice->oldPrice,
+                "newPrice" => $historicPrice->newPrice,
+                "seen" => $historicPrice->seen,
+                "createdAt" => date('d.m.Y H:i', strtotime($historicPrice->created_at)),
+                "createdBy" => $historicPrice->user['firstname'] . " " . $historicPrice->user['lastname']
             ]);
         }
 
@@ -47,10 +47,10 @@ class PriceHistoricController extends Controller
     public function notSeenCount(){
         $JSONResponseHelper = new JSONResponseHelper();
 
-        $notSeenPriceHistorics = PriceHistoric::where("seen", false)->get();
+        $notSeenHistoricPrices = HistoricPrice::where("seen", false)->get();
 
         return $JSONResponseHelper->successJSONResponse([
-            "count" => sizeof($notSeenPriceHistorics)
+            "count" => sizeof($notSeenHistoricPrices)
         ]);
     }
 
@@ -61,7 +61,7 @@ class PriceHistoricController extends Controller
     public function toggleSeen(){
         $JSONResponseHelper = new JSONResponseHelper();
 
-        $historicPricesNotSeen = PriceHistoric::where("seen", false)->get();
+        $historicPricesNotSeen = HistoricPrice::where("seen", false)->get();
 
         foreach($historicPricesNotSeen as $historicPriceNotSeen){
             $historicPriceNotSeen->seen = true;

@@ -6,7 +6,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PriceHistoric extends Model
+class HistoricPrice extends Model
 {
 
     /**

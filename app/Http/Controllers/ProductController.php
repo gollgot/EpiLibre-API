@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\CustomHelpers\JSONResponseHelper;
-use App\PriceHistoric;
+use App\HistoricPrice;
 use App\Product;
 use App\Unit;
 use App\User;
@@ -77,7 +77,7 @@ class ProductController extends Controller
 
             // Notify in DB when a price change !
             if($oldPrice != $product->price){
-                $priceHistoric = new PriceHistoric();
+                $priceHistoric = new HistoricPrice();
                 $priceHistoric->oldPrice = $oldPrice;
                 $priceHistoric->newPrice = $product->price;
                 $priceHistoric->user()->associate($user);

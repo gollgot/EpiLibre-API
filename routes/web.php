@@ -72,16 +72,16 @@ $router->group(['prefix' => 'api'], function () use ($router) {
     ]);
 
     // Historic prices
-    $router->get('/priceHistorics', [
+    $router->get('/historicPrices', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
-        'uses' => 'PriceHistoricController@index'
+        'uses' => 'HistoricPriceController@index'
     ]);
-    $router->get('/priceHistorics/notSeenCount', [
+    $router->get('/historicPrices/notSeenCount', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
-        'uses' => 'PriceHistoricController@notSeenCount'
+        'uses' => 'HistoricPriceController@notSeenCount'
     ]);
-    $router->patch('/priceHistorics/toggleSeen', [
+    $router->patch('/historicPrices/toggleSeen', [
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
-        'uses' => 'PriceHistoricController@toggleSeen'
+        'uses' => 'HistoricPriceController@toggleSeen'
     ]);
 });

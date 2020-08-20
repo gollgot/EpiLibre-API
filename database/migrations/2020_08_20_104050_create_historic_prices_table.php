@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePriceHistoricsTable extends Migration
+class CreateHistoricPricesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreatePriceHistoricsTable extends Migration
      */
     public function up()
     {
-        Schema::create('price_historics', function (Blueprint $table) {
+        Schema::create('historic_prices', function (Blueprint $table) {
             $table->id();
             $table->double("oldPrice");
             $table->double("newPrice");
@@ -35,6 +35,6 @@ class CreatePriceHistoricsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('price_historics');
+        Schema::dropIfExists('historic_prices');
     }
 }
