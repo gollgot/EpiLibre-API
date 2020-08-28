@@ -84,4 +84,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
         'uses' => 'HistoricPriceController@toggleSeen'
     ]);
+
+    // Profile
+    $router->patch('/profile', [
+        'middleware' => ['auth'],
+        'uses' => 'ProfileController@update'
+    ]);
 });
