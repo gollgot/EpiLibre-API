@@ -25,9 +25,9 @@ class OrderController extends Controller
         $resource = [];
         foreach($orders as $order){
             $orderArray = [
-                "totalPrice" => $order->totalPrice,
-                "hasDiscount" => $order->hasDiscount,
-                "discountPrice" => $order->discountPrice,
+                "totalPrice" => doubleval($order->totalPrice),
+                "hasDiscount" => boolval($order->hasDiscount),
+                "discountPrice" => doubleval($order->discountPrice),
                 "seller" => $order->user['firstname'] . " " . $order->user["lastname"],
                 "created_at" => date("d.m.Y H:i", strtotime($order->created_at)),
                 "products" => $this->fetchProducts($order)
