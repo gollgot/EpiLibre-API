@@ -26,6 +26,8 @@ class OrderController extends Controller
         foreach($orders as $order){
             $orderArray = [
                 "totalPrice" => $order->totalPrice,
+                "hasDiscount" => $order->hasDiscount,
+                "discountPrice" => $order->discountPrice,
                 "seller" => $order->user['firstname'] . " " . $order->user["lastname"],
                 "created_at" => date("d.m.Y H:i", strtotime($order->created_at)),
                 "products" => $this->fetchProducts($order)
@@ -62,6 +64,11 @@ class OrderController extends Controller
             // First, create the Order
             $order = new Order();
             $order->totalPrice = $totalPrice;
+            // update discountPrice / hasDiscount if one exists otherwise defaut value (0 and false) will be used
+            if(!empty($request->get('discountPrice'))){
+                $order->discountPrice = $request->get('discountPrice');
+                $order->hasDiscount = true;
+            }
             $order->user()->associate($user);
             $order->save();
 
@@ -92,6 +99,8 @@ class OrderController extends Controller
         return $JSONResponseHelper->createdJSONResponse([
             'id' => $order->id,
             'totalPrice' => doubleval($order->totalPrice),
+            'hasDiscount' => boolval($order->hasDiscount),
+            'discountPrice' => doubleval($order->discountPrice),
             'created_at' => date('d.m.Y H:i', strtotime($order->created_at)),
             'seller' => $order->user['firstname'] . " " . $order->user['lastname'],
             'orderProduct' => $order->ordersProducts
