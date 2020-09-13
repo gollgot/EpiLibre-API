@@ -34,6 +34,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
         'uses' => 'UserController@unconfirm'
     ]);
+    $router->get('/users', [
+        'middleware' => ['auth'],
+        'uses' => 'UserController@index'
+    ]);
 
     // Products
     $router->get('/products', [

@@ -11,6 +11,21 @@ use Ramsey\Uuid\Type\Integer;
 
 class UserController extends Controller
 {
+    
+    /** Return all users that is valid and not deleted
+     * @return \Illuminate\Http\JsonResponse Json response
+     */
+    public function index(){
+        $JSONResponseHelper = new JSONResponseHelper();
+        $users = User::select("id", "firstname", "lastname", "email", "role_id")
+                        ->with("role")
+                        ->where("confirmed", true)
+                        ->where("deleted", false)
+                        ->get();
+
+        return $JSONResponseHelper->successJSONResponse($users);
+    }
+
     /**
      * Return all users that are not validate (pending validation)
      * @param Request $request The request
