@@ -11,7 +11,7 @@ use Ramsey\Uuid\Type\Integer;
 
 class UserController extends Controller
 {
-    
+
     /** Return all users that is valid and not deleted
      * @return \Illuminate\Http\JsonResponse Json response
      */
@@ -21,6 +21,8 @@ class UserController extends Controller
                         ->with("role")
                         ->where("confirmed", true)
                         ->where("deleted", false)
+                        ->orderBy("firstname", "ASC")
+                        ->orderBy("lastname", "ASC")
                         ->get();
 
         return $JSONResponseHelper->successJSONResponse($users);
