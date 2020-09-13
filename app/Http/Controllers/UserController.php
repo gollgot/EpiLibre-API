@@ -28,6 +28,27 @@ class UserController extends Controller
         return $JSONResponseHelper->successJSONResponse($users);
     }
 
+    public function update($user_id, Request $request){
+        $JSONResponseHelper = new JSONResponseHelper();
+        $paramRole = $request->get("role");
+
+        $user = User::where("id", $user_id)->with("role")->first();
+        $role = Role::where("shortName", $paramRole)->first();
+
+        if(empty($user) || empty($role)){
+            return $JSONResponseHelper->badRequestJSONResponse();
+        }else{
+            $user->role()->associate($role);
+            $user->save();
+            return $JSONResponseHelper->successJSONResponse([
+                "firstname" => $user->firstname,
+                "lastname" => $user->lastname,
+                "email" => $user->email,
+                "role" => $user->role["name"],
+            ]);
+        }
+    }
+
     /**
      * Return all users that are not validate (pending validation)
      * @param Request $request The request

@@ -38,6 +38,10 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth'],
         'uses' => 'UserController@index'
     ]);
+    $router->patch('/users/{user_id}', [
+        'middleware' => ['auth', 'App\Http\Middleware\CheckRoleMiddleware:SUPER_ADMIN'],
+        'uses' => 'UserController@update'
+    ]);
 
     // Products
     $router->get('/products', [
