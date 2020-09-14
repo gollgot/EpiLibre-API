@@ -28,6 +28,12 @@ class UserController extends Controller
         return $JSONResponseHelper->successJSONResponse($users);
     }
 
+    /**
+     * Update the role of the user in parameter
+     * @param $user_id Integer The suer id
+     * @param Request $request The request
+     * @return \Illuminate\Http\JsonResponse The json Response
+     */
     public function update($user_id, Request $request){
         $JSONResponseHelper = new JSONResponseHelper();
         $paramRole = $request->get("role");

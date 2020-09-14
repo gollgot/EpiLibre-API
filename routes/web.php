@@ -98,4 +98,8 @@ $router->group(['prefix' => 'api'], function () use ($router) {
         'middleware' => ['auth'],
         'uses' => 'ProfileController@update'
     ]);
+    $router->patch('/profile/password', [
+        'middleware' => ['auth'],
+        'uses' => 'ProfileController@changePassword'
+    ]);
 });
