@@ -64,7 +64,7 @@ class ProfileController extends Controller
 
 
     /**
-     * Change the password of the current user 
+     * Change the password of the current user
      * @param Request $request The request
      * @return \Illuminate\Http\JsonResponse Json response
      */
@@ -95,7 +95,7 @@ class ProfileController extends Controller
         }
 
         // All correct
-        $user->password = hash($hashAlgo, $oldPass);
+        $user->password = hash($hashAlgo, $newPass);
         $user->save();
 
         return $JSONResponseHelper->successJSONResponse([
