@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->boolean('hasDiscount')->default(0);
             $table->double('discountPrice')->default(0);
             $table->string('discountInfo')->default("Aucun rabais");
+            $table->integer('discountPercent')->default(0);
             $table->timestamps();
 
             $table->foreignId('user_id')->constrained();

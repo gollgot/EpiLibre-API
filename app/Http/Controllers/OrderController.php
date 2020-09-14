@@ -29,6 +29,7 @@ class OrderController extends Controller
                 "hasDiscount" => boolval($order->hasDiscount),
                 "discountPrice" => doubleval($order->discountPrice),
                 "discountInfo" => $order->discountInfo,
+                "discountPercent" => $order->discountPercent,
                 "seller" => $order->user['firstname'] . " " . $order->user["lastname"],
                 "created_at" => date("d.m.Y H:i", strtotime($order->created_at)),
                 "products" => $this->fetchProducts($order)
@@ -66,9 +67,10 @@ class OrderController extends Controller
             $order = new Order();
             $order->totalPrice = $totalPrice;
             // update discountPrice / hasDiscount if one exists otherwise defaut value (0 and false) will be used
-            if(!empty($request->get('discountPrice')) && !empty($request->get("discountInfo"))){
+            if(!empty($request->get('discountPrice')) && !empty($request->get("discountInfo")) && !empty($request->get("discountPercent"))){
                 $order->discountPrice = $request->get('discountPrice');
                 $order->discountInfo = $request->get('discountInfo');
+                $order->discountPercent = $request->get('discountPercent');
                 $order->hasDiscount = true;
             }
             $order->user()->associate($user);
@@ -104,6 +106,7 @@ class OrderController extends Controller
             'hasDiscount' => boolval($order->hasDiscount),
             'discountPrice' => doubleval($order->discountPrice),
             'discountInfo' => $order->discountInfo,
+            'discountPercent' => $order->discountPercent,
             'created_at' => date('d.m.Y H:i', strtotime($order->created_at)),
             'seller' => $order->user['firstname'] . " " . $order->user['lastname'],
             'orderProduct' => $order->ordersProducts
