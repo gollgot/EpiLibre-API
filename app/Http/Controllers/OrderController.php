@@ -29,7 +29,7 @@ class OrderController extends Controller
                 "hasDiscount" => boolval($order->hasDiscount),
                 "discountPrice" => doubleval($order->discountPrice),
                 "discountInfo" => $order->discountInfo,
-                "discountPercent" => $order->discountPercent,
+                "discountPercent" => intval($order->discountPercent),
                 "seller" => $order->user['firstname'] . " " . $order->user["lastname"],
                 "created_at" => date("d.m.Y H:i", strtotime($order->created_at)),
                 "products" => $this->fetchProducts($order)
@@ -106,7 +106,7 @@ class OrderController extends Controller
             'hasDiscount' => boolval($order->hasDiscount),
             'discountPrice' => doubleval($order->discountPrice),
             'discountInfo' => $order->discountInfo,
-            'discountPercent' => $order->discountPercent,
+            'discountPercent' => intval($order->discountPercent),
             'created_at' => date('d.m.Y H:i', strtotime($order->created_at)),
             'seller' => $order->user['firstname'] . " " . $order->user['lastname'],
             'orderProduct' => $order->ordersProducts
