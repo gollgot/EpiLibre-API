@@ -46,6 +46,7 @@ class UsersTableSeeder extends Seeder
             'role_id' => 2,
         ]);
 
+        /*
         DB::table('users')->insert([
             'id' => 3,
             'firstname' => 'Jean',
@@ -77,5 +78,6 @@ class UsersTableSeeder extends Seeder
 
             'role_id' => 3,
         ]);
+        */
     }
 }
