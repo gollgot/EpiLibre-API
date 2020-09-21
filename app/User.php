@@ -29,4 +29,21 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * Get the role that owns the user.
+     */
+    public function role()
+    {
+        return $this->belongsTo('App\Role');
+    }
+
+    /**
+     * Get the products modified by the user
+     */
+    public function products()
+    {
+        return $this->hasMany('App\Products');
+    }
+
 }
