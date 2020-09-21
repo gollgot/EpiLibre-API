@@ -47,5 +47,12 @@ class CategoriesTableSeeder extends Seeder
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+
+        DB::table('categories')->insert([
+            'id' => 6,
+            'name' => 'Cautions',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
     }
 }
